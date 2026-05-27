@@ -93,3 +93,62 @@ pub struct ReceiptLine {
     pub quantity_rejected: f64,
     pub rejection_reason: Option<String>,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Contract {
+    pub id: String,
+    pub supplier_id: String,
+    pub title: String,
+    pub contract_type: String, // fixed_price, time_materials, blanket, framework
+    pub value: f64,
+    pub currency: String,
+    pub start_date: String,
+    pub end_date: String,
+    pub auto_renew: bool,
+    pub terms: String,
+    pub status: String, // draft, active, expired, terminated
+    pub created_at: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Invoice {
+    pub id: String,
+    pub po_id: String,
+    pub supplier_id: String,
+    pub invoice_number: String,
+    pub amount: f64,
+    pub currency: String,
+    pub status: String, // pending, matched, disputed, paid
+    pub received_at: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Budget {
+    pub id: String,
+    pub department: String,
+    pub category: String,
+    pub allocated: f64,
+    pub spent: f64,
+    pub currency: String,
+    pub period: String, // 2026-Q2, 2026
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SupplierDiversity {
+    pub supplier_id: String,
+    pub certifications: Vec<String>, // minority_owned, women_owned, veteran_owned, small_business, disabled_owned, lgbtq_owned
+    pub certified_by: Option<String>,
+    pub expiry_date: Option<String>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CatalogItem {
+    pub id: String,
+    pub supplier_id: String,
+    pub sku: String,
+    pub description: String,
+    pub unit_price: f64,
+    pub currency: String,
+    pub lead_time_days: u32,
+    pub min_order_qty: f64,
+}

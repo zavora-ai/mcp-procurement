@@ -10,22 +10,9 @@ AI-powered procurement engine for [ADK-Rust Enterprise](https://enterprise.adk-r
 
 ## Architecture
 
-```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                       mcp-procurement (37 tools)                            │
-├──────────┬──────────┬──────────┬──────────┬──────────┬─────────────────────┤
-│Suppliers │    PO    │   RFQ    │Contracts │ Compliance│   Intelligence      │
-├──────────┼──────────┼──────────┼──────────┼──────────┼─────────────────────┤
-│ Create   │ Create   │ Create   │ Create   │ 3-way    │ Risk score          │
-│ List     │ Approve  │ Respond  │ List     │  match   │ Price benchmark     │
-│ Rate     │ Send     │ Compare  │ Get      │ Budget   │ Carbon footprint    │
-│ Get      │ Cancel   │ Award    │ Clause   │ Diversity│ Supplier recommend  │
-│          │ Receive  │          │  check   │ Maverick │ Demand forecast     │
-│          │          │          │          │ Catalogs │ Savings opportunity │
-│          │          │          │          │ Escalate │ Scorecard           │
-│          │          │          │          │          │ Negotiation brief   │
-└──────────┴──────────┴──────────┴──────────┴──────────┴─────────────────────┘
-```
+<p align="center">
+  <img src="https://raw.githubusercontent.com/zavora-ai/mcp-procurement/main/docs/assets/architecture.svg" alt="Procurement MCP Architecture" width="900"/>
+</p>
 
 ## Key Principles
 

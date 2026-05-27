@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 580">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a78bfa"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="580" fill="url(#bg)" rx="12"/>
+  <text x="460" y="32" text-anchor="middle" fill="#f1f5f9" font-family="system-ui" font-size="16" font-weight="bold">mcp-procurement v2.0 — AI-Powered Procurement Engine</text>
+
+  <!-- Agent -->
+  <rect x="20" y="50" width="120" height="55" fill="url(#card)" stroke="#6366f1" stroke-width="2" rx="8"/>
+  <text x="80" y="73" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="11" font-weight="bold">AI Agent</text>
+  <text x="80" y="90" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="8">MCP Client</text>
+  <line x1="140" y1="77" x2="180" y2="77" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Tool Router -->
+  <rect x="185" y="45" width="715" height="65" fill="url(#card)" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+  <text x="540" y="65" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="12" font-weight="bold">Tool Router — 37 Tools</text>
+  <rect x="200" y="76" width="60" height="16" fill="#4c1d95" rx="3"/>
+  <text x="230" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Suppliers</text>
+  <rect x="265" y="76" width="40" height="16" fill="#4c1d95" rx="3"/>
+  <text x="285" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">POs</text>
+  <rect x="310" y="76" width="40" height="16" fill="#4c1d95" rx="3"/>
+  <text x="330" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">RFQs</text>
+  <rect x="355" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="382" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Contracts</text>
+  <rect x="415" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="442" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">3-Way</text>
+  <rect x="475" y="76" width="50" height="16" fill="#4c1d95" rx="3"/>
+  <text x="500" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Budget</text>
+  <rect x="530" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="557" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Diversity</text>
+  <rect x="590" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="617" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Catalogs</text>
+  <rect x="650" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="677" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Receive</text>
+  <rect x="710" y="76" width="80" height="16" fill="#f59e0b" rx="3"/>
+  <text x="750" y="87" text-anchor="middle" fill="#1e293b" font-family="system-ui" font-size="7" font-weight="bold">Intelligence</text>
+  <rect x="795" y="76" width="55" height="16" fill="#4c1d95" rx="3"/>
+  <text x="822" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Analytics</text>
+
+  <!-- Source-to-Pay Flow -->
+  <rect x="20" y="130" width="880" height="80" fill="url(#card)" stroke="#10b981" stroke-width="2" rx="8"/>
+  <text x="460" y="150" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="11" font-weight="bold">Source-to-Pay Lifecycle</text>
+
+  <rect x="40" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="85" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Sourcing</text>
+  <line x1="130" y1="177" x2="150" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="155" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="200" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">RFQ/Bid</text>
+  <line x1="245" y1="177" x2="265" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="270" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="315" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Contract</text>
+  <line x1="360" y1="177" x2="380" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="385" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="430" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Purchase</text>
+  <line x1="475" y1="177" x2="495" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="500" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="545" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Approve</text>
+  <line x1="590" y1="177" x2="610" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="615" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="660" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Receive</text>
+  <line x1="705" y1="177" x2="725" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="730" y="162" width="90" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="775" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">3-Way Match</text>
+  <line x1="820" y1="177" x2="840" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="845" y="162" width="45" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="867" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Pay ✓</text>
+
+  <!-- Intelligence Layer (USP) -->
+  <rect x="20" y="230" width="880" height="150" fill="url(#card)" stroke="#f59e0b" stroke-width="2" rx="8"/>
+  <text x="460" y="253" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="12" font-weight="bold">🏆 AI Intelligence Layer (Unique — No Competitor Has This)</text>
+
+  <!-- Intelligence tools grid -->
+  <rect x="40" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="120" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">supplier_risk_score</text>
+  <text x="120" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Multi-factor 0-100 risk</text>
+
+  <rect x="210" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="290" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">price_benchmark</text>
+  <text x="290" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Quote vs market verdict</text>
+
+  <rect x="380" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="460" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">carbon_footprint</text>
+  <text x="460" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">CO₂ per shipment (ESG)</text>
+
+  <rect x="550" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="630" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">supplier_recommend</text>
+  <text x="630" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">AI-ranked suggestions</text>
+
+  <rect x="720" y="268" width="170" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="805" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">contract_clause_check</text>
+  <text x="805" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Flag risky clauses</text>
+
+  <rect x="40" y="318" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="120" y="334" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">demand_forecast</text>
+  <text x="120" y="349" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Predict future spend</text>
+
+  <rect x="210" y="318" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="290" y="334" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">savings_opportunity</text>
+  <text x="290" y="349" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Find price variances</text>
+
+  <rect x="380" y="318" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="460" y="334" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">supplier_scorecard</text>
+  <text x="460" y="349" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">A/B/C/D performance</text>
+
+  <rect x="550" y="318" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="630" y="334" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">maverick_spend_detect</text>
+  <text x="630" y="349" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">Policy violations</text>
+
+  <rect x="720" y="318" width="170" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="805" y="334" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">negotiation_brief</text>
+  <text x="805" y="349" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">BATNA + strategy</text>
+
+  <!-- Data Store -->
+  <rect x="20" y="400" width="430" height="80" fill="url(#card)" stroke="#06b6d4" stroke-width="2" rx="8"/>
+  <text x="235" y="420" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="11" font-weight="bold">Data Store</text>
+  <rect x="35" y="432" width="60" height="18" fill="#164e63" rx="3"/>
+  <text x="65" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">Suppliers</text>
+  <rect x="100" y="432" width="40" height="18" fill="#164e63" rx="3"/>
+  <text x="120" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">POs</text>
+  <rect x="145" y="432" width="40" height="18" fill="#164e63" rx="3"/>
+  <text x="165" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">RFQs</text>
+  <rect x="190" y="432" width="55" height="18" fill="#164e63" rx="3"/>
+  <text x="217" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">Contracts</text>
+  <rect x="250" y="432" width="50" height="18" fill="#164e63" rx="3"/>
+  <text x="275" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">Invoices</text>
+  <rect x="305" y="432" width="50" height="18" fill="#164e63" rx="3"/>
+  <text x="330" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">Budgets</text>
+  <rect x="360" y="432" width="50" height="18" fill="#164e63" rx="3"/>
+  <text x="385" y="444" text-anchor="middle" fill="#67e8f9" font-family="system-ui" font-size="7">Catalogs</text>
+
+  <!-- Governance -->
+  <rect x="470" y="400" width="430" height="80" fill="url(#card)" stroke="#ec4899" stroke-width="2" rx="8"/>
+  <text x="685" y="420" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="11" font-weight="bold">Governance & Compliance</text>
+  <text x="500" y="445" fill="#f9a8d4" font-family="system-ui" font-size="8">• Multi-level approval (Manager → Director → CFO)</text>
+  <text x="500" y="460" fill="#f9a8d4" font-family="system-ui" font-size="8">• Budget enforcement before PO approval</text>
+  <text x="500" y="475" fill="#f9a8d4" font-family="system-ui" font-size="8">• Maverick spend detection • Diversity tracking</text>
+
+  <!-- Comparison bar -->
+  <rect x="20" y="500" width="880" height="65" fill="url(#card)" stroke="#475569" stroke-width="1" rx="8"/>
+  <text x="460" y="520" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="10" font-weight="bold">vs Competition</text>
+  <text x="120" y="545" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="9">SAP Ariba: $150K+/yr</text>
+  <text x="300" y="545" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="9">Coupa: $100K+/yr</text>
+  <text x="480" y="545" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="9">Oracle: $200K+/yr</text>
+  <text x="700" y="545" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">mcp-procurement: Free + Open Source + AI Intelligence</text>
+</svg>

@@ -1,0 +1,123 @@
+server_id = "mcp_procurement"
+display_name = "Procurement"
+version = "1.0.0"
+domain = "procurement"
+sdk_version = "0.1.0"
+risk_level = "medium"
+writes_allowed = "gated"
+transports = ["stdio"]
+credentials = []
+governance_gates = ["po_approval_required"]
+environments = ["development", "staging", "production"]
+
+[[tools]]
+name = "supplier_create"
+description = "Register a supplier"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "supplier_list"
+description = "List suppliers"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "supplier_get"
+description = "Get supplier details"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "supplier_rate"
+description = "Rate a supplier"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "po_create"
+description = "Create purchase order"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "po_list"
+description = "List purchase orders"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "po_get"
+description = "Get PO details"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "po_approve"
+description = "Approve purchase order"
+risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []
+
+[[tools]]
+name = "po_send"
+description = "Send PO to supplier"
+risk_class = "external_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "po_cancel"
+description = "Cancel purchase order"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "rfq_create"
+description = "Create RFQ"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "rfq_respond"
+description = "Submit supplier response"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "rfq_compare"
+description = "Compare RFQ responses"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "rfq_award"
+description = "Award RFQ to supplier"
+risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []
+
+[[tools]]
+name = "goods_receive"
+description = "Receive goods against PO"
+risk_class = "internal_write"
+requires_approval = false
+credential_bindings = []
+
+[[tools]]
+name = "spend_analysis"
+description = "Spend analytics"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = []

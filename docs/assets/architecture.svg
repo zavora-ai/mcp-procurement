@@ -14,7 +14,7 @@
   </defs>
 
   <rect width="920" height="580" fill="url(#bg)" rx="12"/>
-  <text x="460" y="32" text-anchor="middle" fill="#f1f5f9" font-family="system-ui" font-size="16" font-weight="bold">mcp-procurement v2.0 — AI-Powered Procurement Engine</text>
+  <text x="460" y="32" text-anchor="middle" fill="#f1f5f9" font-family="system-ui" font-size="16" font-weight="bold">mcp-procurement v2.0 - AI-Powered Procurement Engine</text>
 
   <!-- Agent -->
   <rect x="20" y="50" width="120" height="55" fill="url(#card)" stroke="#6366f1" stroke-width="2" rx="8"/>
@@ -24,7 +24,7 @@
 
   <!-- Tool Router -->
   <rect x="185" y="45" width="715" height="65" fill="url(#card)" stroke="#8b5cf6" stroke-width="2" rx="8"/>
-  <text x="540" y="65" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="12" font-weight="bold">Tool Router — 37 Tools</text>
+  <text x="540" y="65" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="12" font-weight="bold">Tool Router - 37 Tools</text>
   <rect x="200" y="76" width="60" height="16" fill="#4c1d95" rx="3"/>
   <text x="230" y="87" text-anchor="middle" fill="#c4b5fd" font-family="system-ui" font-size="7">Suppliers</text>
   <rect x="265" y="76" width="40" height="16" fill="#4c1d95" rx="3"/>
@@ -81,11 +81,11 @@
   <line x1="820" y1="177" x2="840" y2="177" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <rect x="845" y="162" width="45" height="30" fill="#064e3b" stroke="#10b981" stroke-width="1" rx="4"/>
-  <text x="867" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Pay ✓</text>
+  <text x="867" y="180" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="8">Pay OK</text>
 
   <!-- Intelligence Layer (USP) -->
   <rect x="20" y="230" width="880" height="150" fill="url(#card)" stroke="#f59e0b" stroke-width="2" rx="8"/>
-  <text x="460" y="253" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="12" font-weight="bold">🏆 AI Intelligence Layer (Unique — No Competitor Has This)</text>
+  <text x="460" y="253" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="12" font-weight="bold">★ AI Intelligence Layer — No Competitor Has This</text>
 
   <!-- Intelligence tools grid -->
   <rect x="40" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
@@ -98,7 +98,7 @@
 
   <rect x="380" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
   <text x="460" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">carbon_footprint</text>
-  <text x="460" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">CO₂ per shipment (ESG)</text>
+  <text x="460" y="299" text-anchor="middle" fill="#fde68a" font-family="system-ui" font-size="7">CO2 per shipment (ESG)</text>
 
   <rect x="550" y="268" width="160" height="40" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
   <text x="630" y="284" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="9" font-weight="bold">supplier_recommend</text>
@@ -149,7 +149,7 @@
   <!-- Governance -->
   <rect x="470" y="400" width="430" height="80" fill="url(#card)" stroke="#ec4899" stroke-width="2" rx="8"/>
   <text x="685" y="420" text-anchor="middle" fill="#e2e8f0" font-family="system-ui" font-size="11" font-weight="bold">Governance & Compliance</text>
-  <text x="500" y="445" fill="#f9a8d4" font-family="system-ui" font-size="8">• Multi-level approval (Manager → Director → CFO)</text>
+  <text x="500" y="445" fill="#f9a8d4" font-family="system-ui" font-size="8">• Multi-level approval (Manager - Director - CFO)</text>
   <text x="500" y="460" fill="#f9a8d4" font-family="system-ui" font-size="8">• Budget enforcement before PO approval</text>
   <text x="500" y="475" fill="#f9a8d4" font-family="system-ui" font-size="8">• Maverick spend detection • Diversity tracking</text>
 

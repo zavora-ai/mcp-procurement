@@ -10,9 +10,7 @@ AI-powered procurement engine for [ADK-Rust Enterprise](https://enterprise.adk-r
 
 ## Architecture
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/zavora-ai/mcp-procurement/main/docs/assets/architecture.svg" alt="Procurement MCP Architecture" width="900"/>
-</p>
+![Procurement MCP Architecture](https://raw.githubusercontent.com/zavora-ai/mcp-procurement/main/docs/assets/architecture.svg)
 
 ## Key Principles
 

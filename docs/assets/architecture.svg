@@ -105,7 +105,7 @@
 
   <rect x="695" y="285" width="175" height="35" fill="#78350f" stroke="#f59e0b" stroke-width="1" rx="4"/>
   <text x="782" y="300" text-anchor="middle" fill="#fbbf24" font-family="Arial,sans-serif" font-size="8" font-weight="bold">negotiation_brief</text>
-  <text x="782" y="313" text-anchor="middle" fill="#fde68a" font-family="Arial,sans-serif" font-size="7">BATNA + strategy</text>
+  <text x="782" y="313" text-anchor="middle" fill="#fde68a" font-family="Arial,sans-serif" font-size="7">BATNA and strategy</text>
 
   <text x="450" y="348" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="8">These 10 tools provide capabilities that SAP Ariba, Coupa, and Oracle do not offer</text>
 
@@ -128,15 +128,15 @@
 
   <rect x="460" y="375" width="420" height="75" fill="#1e293b" stroke="#ec4899" stroke-width="2" rx="8"/>
   <text x="670" y="395" text-anchor="middle" fill="#e2e8f0" font-family="Arial,sans-serif" font-size="10" font-weight="bold">Governance</text>
-  <text x="480" y="415" fill="#f9a8d4" font-family="Arial,sans-serif" font-size="8">Multi-level approval (Manager/Director/CFO)</text>
+  <text x="480" y="415" fill="#f9a8d4" font-family="Arial,sans-serif" font-size="8">Multi-level approval (Manager, Director, CFO)</text>
   <text x="480" y="430" fill="#f9a8d4" font-family="Arial,sans-serif" font-size="8">Budget enforcement before PO approval</text>
-  <text x="480" y="445" fill="#f9a8d4" font-family="Arial,sans-serif" font-size="8">Maverick spend detection + Diversity tracking</text>
+  <text x="480" y="445" fill="#f9a8d4" font-family="Arial,sans-serif" font-size="8">Maverick spend detection, Diversity tracking</text>
 
   <rect x="20" y="470" width="860" height="75" fill="#1e293b" stroke="#475569" stroke-width="1" rx="8"/>
   <text x="450" y="492" text-anchor="middle" fill="#e2e8f0" font-family="Arial,sans-serif" font-size="10" font-weight="bold">vs Competition</text>
-  <text x="130" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">SAP Ariba: $150K+/yr</text>
-  <text x="320" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">Coupa: $100K+/yr</text>
-  <text x="500" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">Oracle: $200K+/yr</text>
-  <text x="720" y="515" text-anchor="middle" fill="#fbbf24" font-family="Arial,sans-serif" font-size="9" font-weight="bold">mcp-procurement: Free + Open Source</text>
-  <text x="720" y="532" text-anchor="middle" fill="#fbbf24" font-family="Arial,sans-serif" font-size="8">+ AI Intelligence no one else has</text>
+  <text x="130" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">SAP Ariba: 150K+ per year</text>
+  <text x="320" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">Coupa: 100K+ per year</text>
+  <text x="500" y="515" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="9">Oracle: 200K+ per year</text>
+  <text x="720" y="515" text-anchor="middle" fill="#fbbf24" font-family="Arial,sans-serif" font-size="9" font-weight="bold">mcp-procurement: Free, Open Source</text>
+  <text x="720" y="532" text-anchor="middle" fill="#fbbf24" font-family="Arial,sans-serif" font-size="8">with AI Intelligence no one else has</text>
 </svg>

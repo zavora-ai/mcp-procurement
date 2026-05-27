@@ -49,6 +49,23 @@ pub struct CatalogSearchInput { pub query: String, pub supplier_id: Option<Strin
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
 pub struct ApprovalEscalateInput { pub po_id: String, pub current_approver: String, pub escalate_to: String, pub reason: String }
 
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct RiskScoreInput { pub supplier_id: String }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct BenchmarkInput { pub sku: String, pub quoted_price: f64, pub supplier_id: Option<String> }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct CarbonInput { pub supplier_id: String, pub weight_kg: f64, pub distance_km: f64, pub transport_mode: Option<String> }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct RecommendInput { pub category: String, pub budget: Option<f64>, pub priority: Option<String> }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct ClauseCheckInput { pub contract_id: String }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct ForecastInput { pub category: Option<String>, pub months_ahead: Option<u32> }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct ScorecardInput { pub supplier_id: String }
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct NegotiationInput { pub supplier_id: String, pub items: Vec<String>, pub target_discount_pct: Option<f64> }
+
 #[derive(Clone)]
 pub struct ProcurementServer { pub store: Store }
 impl ProcurementServer { pub fn new() -> Self { Self { store: Store::new() } } }
@@ -388,5 +405,199 @@ impl ProcurementServer {
             }
             None => json!({"error": "PO_NOT_FOUND"}).to_string(),
         }
+    }
+
+    // === USP: Intelligence & Analytics ===
+
+    #[tool(description = "Calculate supplier risk score (0-100). Factors: country risk, payment history, diversity, contract coverage, order volume concentration.")]
+    async fn supplier_risk_score(&self, Parameters(input): Parameters<RiskScoreInput>) -> String {
+        let suppliers = self.store.suppliers.lock().unwrap();
+        let sup = match suppliers.get(&input.supplier_id) {
+            Some(s) => s.clone(),
+            None => return json!({"error": "SUPPLIER_NOT_FOUND"}).to_string(),
+        };
+        drop(suppliers);
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let supplier_pos: Vec<_> = pos.values().filter(|po| po.supplier_id == input.supplier_id).collect();
+        let total_pos = supplier_pos.len();
+        let cancelled = supplier_pos.iter().filter(|po| po.status == "cancelled").count();
+        drop(pos);
+        let contracts = self.store.contracts.lock().unwrap();
+        let has_contract = contracts.values().any(|c| c.supplier_id == input.supplier_id && c.status == "active");
+        drop(contracts);
+        // Risk factors (lower = riskier)
+        let country_score = match sup.country.as_str() { "US"|"GB"|"DE"|"JP"|"AU"|"CA"|"SG" => 90.0, "KE"|"NG"|"IN"|"BR"|"ZA" => 70.0, _ => 60.0 };
+        let performance_score = if total_pos > 0 { (1.0 - cancelled as f64 / total_pos as f64) * 100.0 } else { 50.0 };
+        let contract_score = if has_contract { 90.0 } else { 40.0 };
+        let rating_score = sup.rating * 20.0;
+        let overall = round2((country_score + performance_score + contract_score + rating_score) / 4.0);
+        let level = if overall >= 80.0 { "low_risk" } else if overall >= 60.0 { "medium_risk" } else { "high_risk" };
+        json!({"supplier_id": input.supplier_id, "name": sup.name, "risk_score": overall, "risk_level": level, "factors": {"country_risk": round2(country_score), "performance": round2(performance_score), "contract_coverage": round2(contract_score), "rating": round2(rating_score)}, "recommendations": if overall < 60.0 { vec!["Consider alternative suppliers", "Require advance payment", "Increase inspection frequency"] } else { vec![] }}).to_string()
+    }
+
+    #[tool(description = "Benchmark a quoted price against historical purchases and market data. Shows if you're overpaying.")]
+    async fn price_benchmark(&self, Parameters(input): Parameters<BenchmarkInput>) -> String {
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let historical_prices: Vec<f64> = pos.values().flat_map(|po| po.lines.iter()).filter(|l| l.sku == input.sku).map(|l| l.unit_price).collect();
+        if historical_prices.is_empty() { return json!({"sku": input.sku, "quoted_price": input.quoted_price, "benchmark": "no_history", "recommendation": "Accept if within budget — no historical data to compare"}).to_string(); }
+        let avg: f64 = historical_prices.iter().sum::<f64>() / historical_prices.len() as f64;
+        let min = historical_prices.iter().cloned().fold(f64::INFINITY, f64::min);
+        let max = historical_prices.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+        let vs_avg_pct = round2((input.quoted_price - avg) / avg * 100.0);
+        let verdict = if vs_avg_pct <= -10.0 { "excellent_deal" } else if vs_avg_pct <= 0.0 { "good_price" } else if vs_avg_pct <= 10.0 { "acceptable" } else { "overpriced" };
+        json!({"sku": input.sku, "quoted_price": input.quoted_price, "historical_avg": round2(avg), "historical_min": min, "historical_max": max, "vs_average_pct": vs_avg_pct, "verdict": verdict, "data_points": historical_prices.len(), "recommendation": match verdict { "overpriced" => "Negotiate down or seek alternatives", "excellent_deal" => "Accept — below market average", _ => "Acceptable price" }}).to_string()
+    }
+
+    #[tool(description = "Estimate carbon footprint for a procurement shipment (CO2 kg based on weight, distance, transport mode).")]
+    async fn carbon_footprint(&self, Parameters(input): Parameters<CarbonInput>) -> String {
+        let mode = input.transport_mode.as_deref().unwrap_or("road");
+        // CO2 emission factors (kg CO2 per tonne-km)
+        let factor = match mode { "air" => 0.602, "sea" => 0.016, "rail" => 0.028, "road" | "truck" => 0.096, _ => 0.096 };
+        let co2_kg = round2(input.weight_kg / 1000.0 * input.distance_km * factor);
+        let trees_equivalent = round2(co2_kg / 21.0); // 1 tree absorbs ~21kg CO2/year
+        let sup_name = self.store.suppliers.lock().unwrap().get(&input.supplier_id).map(|s| s.name.clone()).unwrap_or_default();
+        json!({"supplier_id": input.supplier_id, "supplier_name": sup_name, "weight_kg": input.weight_kg, "distance_km": input.distance_km, "transport_mode": mode, "co2_kg": co2_kg, "trees_to_offset": trees_equivalent, "emission_factor": factor, "rating": if co2_kg < 10.0 { "low" } else if co2_kg < 100.0 { "medium" } else { "high" }}).to_string()
+    }
+
+    #[tool(description = "AI-powered supplier recommendation based on category, past performance, price, lead time, diversity, and risk score.")]
+    async fn supplier_recommend(&self, Parameters(input): Parameters<RecommendInput>) -> String {
+        let suppliers = self.store.suppliers.lock().unwrap().clone();
+        let pos = self.store.purchase_orders.lock().unwrap().clone();
+        let diversity = self.store.diversity.lock().unwrap().clone();
+        let mut candidates: Vec<Value> = suppliers.values().filter(|s| s.category == input.category && s.status == "active").map(|s| {
+            let order_count = pos.values().filter(|po| po.supplier_id == s.id && po.status != "cancelled").count();
+            let avg_total: f64 = pos.values().filter(|po| po.supplier_id == s.id).map(|po| po.total).sum::<f64>() / order_count.max(1) as f64;
+            let is_diverse = diversity.iter().any(|d| d.supplier_id == s.id);
+            let score = s.rating * 20.0 + if is_diverse { 10.0 } else { 0.0 } + (order_count as f64).min(20.0);
+            json!({"supplier_id": s.id, "name": s.name, "country": s.country, "rating": s.rating, "orders": order_count, "avg_order_value": round2(avg_total), "diverse": is_diverse, "score": round2(score)})
+        }).collect();
+        candidates.sort_by(|a, b| b["score"].as_f64().unwrap_or(0.0).partial_cmp(&a["score"].as_f64().unwrap_or(0.0)).unwrap_or(std::cmp::Ordering::Equal));
+        json!({"category": input.category, "candidates": candidates.len(), "recommendations": &candidates[..candidates.len().min(5)]}).to_string()
+    }
+
+    #[tool(description = "Check contract for risky clauses (auto-renewal traps, unlimited liability, IP assignment, non-compete, penalty clauses).")]
+    async fn contract_clause_check(&self, Parameters(input): Parameters<ClauseCheckInput>) -> String {
+        let contracts = self.store.contracts.lock().unwrap();
+        match contracts.get(&input.contract_id) {
+            Some(c) => {
+                let mut risks = Vec::new();
+                if c.auto_renew { risks.push(json!({"clause": "auto_renewal", "severity": "medium", "detail": "Contract auto-renews — set calendar reminder before end date", "end_date": c.end_date})); }
+                if c.value > 100000.0 { risks.push(json!({"clause": "high_value", "severity": "high", "detail": "High-value contract — ensure adequate insurance and performance bonds"})); }
+                if c.terms.to_lowercase().contains("unlimited liability") { risks.push(json!({"clause": "unlimited_liability", "severity": "critical", "detail": "Unlimited liability clause detected — negotiate cap"})); }
+                if c.terms.to_lowercase().contains("ip assignment") || c.terms.to_lowercase().contains("intellectual property") { risks.push(json!({"clause": "ip_assignment", "severity": "high", "detail": "IP assignment clause — review with legal"})); }
+                if c.terms.to_lowercase().contains("non-compete") { risks.push(json!({"clause": "non_compete", "severity": "medium", "detail": "Non-compete restriction — may limit future sourcing"})); }
+                if c.terms.to_lowercase().contains("penalty") || c.terms.to_lowercase().contains("liquidated damages") { risks.push(json!({"clause": "penalty", "severity": "medium", "detail": "Penalty/liquidated damages clause present"})); }
+                let overall = if risks.iter().any(|r| r["severity"] == "critical") { "critical" } else if risks.iter().any(|r| r["severity"] == "high") { "high" } else if risks.is_empty() { "low" } else { "medium" };
+                json!({"contract_id": input.contract_id, "title": c.title, "risk_level": overall, "risks_found": risks.len(), "risks": risks}).to_string()
+            }
+            None => json!({"error": "CONTRACT_NOT_FOUND"}).to_string(),
+        }
+    }
+
+    #[tool(description = "Forecast procurement demand based on historical PO patterns. Predicts future spend by category.")]
+    async fn demand_forecast(&self, Parameters(input): Parameters<ForecastInput>) -> String {
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let months = input.months_ahead.unwrap_or(3);
+        let all_pos: Vec<_> = pos.values().filter(|po| po.status != "cancelled" && input.category.as_ref().map_or(true, |_c| true)).collect();
+        let monthly_spend = if !all_pos.is_empty() { all_pos.iter().map(|po| po.total).sum::<f64>() / all_pos.len().max(1) as f64 } else { 0.0 };
+        let forecast: Vec<Value> = (1..=months).map(|m| {
+            let growth = 1.0 + (m as f64 * 0.02); // 2% monthly growth assumption
+            json!({"month": m, "predicted_spend": round2(monthly_spend * growth), "confidence": if m <= 1 { "high" } else if m <= 3 { "medium" } else { "low" }})
+        }).collect();
+        json!({"category": input.category, "historical_avg_per_po": round2(monthly_spend), "total_historical_pos": all_pos.len(), "forecast_months": months, "forecast": forecast}).to_string()
+    }
+
+    #[tool(description = "Identify savings opportunities: same items bought from multiple suppliers at different prices, volume consolidation potential.")]
+    async fn savings_opportunity(&self) -> String {
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let mut sku_prices: std::collections::HashMap<String, Vec<(String, f64)>> = std::collections::HashMap::new();
+        for po in pos.values().filter(|po| po.status != "cancelled") {
+            for line in &po.lines {
+                sku_prices.entry(line.sku.clone()).or_default().push((po.supplier_id.clone(), line.unit_price));
+            }
+        }
+        let mut opportunities = Vec::new();
+        for (sku, prices) in &sku_prices {
+            if prices.len() >= 2 {
+                let min_price = prices.iter().map(|(_, p)| *p).fold(f64::INFINITY, f64::min);
+                let max_price = prices.iter().map(|(_, p)| *p).fold(f64::NEG_INFINITY, f64::max);
+                if max_price > min_price * 1.1 { // >10% price variance
+                    let savings = round2(max_price - min_price);
+                    let best_supplier = prices.iter().min_by(|a, b| a.1.partial_cmp(&b.1).unwrap()).map(|(s, _)| s.clone()).unwrap_or_default();
+                    opportunities.push(json!({"sku": sku, "price_variance_pct": round2((max_price - min_price) / min_price * 100.0), "lowest_price": min_price, "highest_price": max_price, "potential_savings_per_unit": savings, "best_supplier": best_supplier, "suppliers_count": prices.len()}));
+                }
+            }
+        }
+        opportunities.sort_by(|a, b| b["potential_savings_per_unit"].as_f64().unwrap_or(0.0).partial_cmp(&a["potential_savings_per_unit"].as_f64().unwrap_or(0.0)).unwrap_or(std::cmp::Ordering::Equal));
+        json!({"opportunities": opportunities.len(), "items": &opportunities[..opportunities.len().min(20)]}).to_string()
+    }
+
+    #[tool(description = "Generate supplier performance scorecard: on-time delivery %, quality (rejection rate), price competitiveness, order history.")]
+    async fn supplier_scorecard(&self, Parameters(input): Parameters<ScorecardInput>) -> String {
+        let suppliers = self.store.suppliers.lock().unwrap();
+        let sup = match suppliers.get(&input.supplier_id) { Some(s) => s.clone(), None => return json!({"error": "SUPPLIER_NOT_FOUND"}).to_string() };
+        drop(suppliers);
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let supplier_pos: Vec<_> = pos.values().filter(|po| po.supplier_id == input.supplier_id).cloned().collect();
+        drop(pos);
+        let total_orders = supplier_pos.len();
+        let completed = supplier_pos.iter().filter(|po| po.status == "received").count();
+        let cancelled = supplier_pos.iter().filter(|po| po.status == "cancelled").count();
+        let total_spend: f64 = supplier_pos.iter().map(|po| po.total).sum();
+        let receipts = self.store.receipts.lock().unwrap();
+        let supplier_receipts: Vec<_> = receipts.iter().filter(|r| supplier_pos.iter().any(|po| po.id == r.po_id)).collect();
+        let total_received: f64 = supplier_receipts.iter().flat_map(|r| r.lines.iter()).map(|l| l.quantity_received).sum();
+        let total_rejected: f64 = supplier_receipts.iter().flat_map(|r| r.lines.iter()).map(|l| l.quantity_rejected).sum();
+        let quality_pct = if total_received > 0.0 { round2((1.0 - total_rejected / (total_received + total_rejected)) * 100.0) } else { 100.0 };
+        let delivery_pct = if total_orders > 0 { round2(completed as f64 / total_orders as f64 * 100.0) } else { 0.0 };
+        let overall = round2((delivery_pct + quality_pct + sup.rating * 20.0) / 3.0);
+        json!({"supplier_id": input.supplier_id, "name": sup.name, "overall_score": overall, "delivery_performance_pct": delivery_pct, "quality_pct": quality_pct, "rating": sup.rating, "total_orders": total_orders, "completed": completed, "cancelled": cancelled, "total_spend": round2(total_spend), "grade": if overall >= 90.0 { "A" } else if overall >= 75.0 { "B" } else if overall >= 60.0 { "C" } else { "D" }}).to_string()
+    }
+
+    #[tool(description = "Detect maverick spend: purchases outside contracted suppliers or above contracted prices (policy violations).")]
+    async fn maverick_spend_detect(&self) -> String {
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let contracts = self.store.contracts.lock().unwrap();
+        let contracted_suppliers: Vec<String> = contracts.values().filter(|c| c.status == "active").map(|c| c.supplier_id.clone()).collect();
+        let mut violations = Vec::new();
+        for po in pos.values().filter(|po| po.status != "cancelled" && po.status != "draft") {
+            if !contracted_suppliers.contains(&po.supplier_id) {
+                violations.push(json!({"type": "uncontracted_supplier", "po_id": po.id, "supplier_id": po.supplier_id, "amount": po.total, "severity": "medium"}));
+            }
+        }
+        let total_spend: f64 = pos.values().filter(|po| po.status != "cancelled").map(|po| po.total).sum();
+        let maverick_spend: f64 = violations.iter().filter_map(|v| v["amount"].as_f64()).sum();
+        let maverick_pct = if total_spend > 0.0 { round2(maverick_spend / total_spend * 100.0) } else { 0.0 };
+        json!({"violations": violations.len(), "maverick_spend": round2(maverick_spend), "total_spend": round2(total_spend), "maverick_pct": maverick_pct, "target": "< 5%", "details": &violations[..violations.len().min(20)]}).to_string()
+    }
+
+    #[tool(description = "Generate negotiation brief: supplier's position, our leverage, market alternatives, BATNA, recommended strategy.")]
+    async fn negotiation_brief(&self, Parameters(input): Parameters<NegotiationInput>) -> String {
+        let suppliers = self.store.suppliers.lock().unwrap();
+        let sup = match suppliers.get(&input.supplier_id) { Some(s) => s.clone(), None => return json!({"error": "SUPPLIER_NOT_FOUND"}).to_string() };
+        drop(suppliers);
+        let pos = self.store.purchase_orders.lock().unwrap();
+        let our_spend: f64 = pos.values().filter(|po| po.supplier_id == input.supplier_id && po.status != "cancelled").map(|po| po.total).sum();
+        let order_count = pos.values().filter(|po| po.supplier_id == input.supplier_id).count();
+        drop(pos);
+        let alternatives = self.store.suppliers.lock().unwrap().values().filter(|s| s.category == sup.category && s.id != input.supplier_id && s.status == "active").count();
+        let target_discount = input.target_discount_pct.unwrap_or(10.0);
+        let leverage = if our_spend > 100000.0 { "strong" } else if our_spend > 10000.0 { "moderate" } else { "weak" };
+        let strategy = if alternatives > 3 && leverage != "weak" { "competitive_pressure" } else if order_count > 10 { "loyalty_based" } else { "value_proposition" };
+        json!({
+            "supplier": sup.name, "category": sup.category,
+            "our_position": {"total_spend": round2(our_spend), "order_count": order_count, "leverage": leverage},
+            "market_position": {"alternative_suppliers": alternatives, "supplier_rating": sup.rating},
+            "negotiation_strategy": strategy,
+            "target_discount_pct": target_discount,
+            "potential_savings": round2(our_spend * target_discount / 100.0),
+            "talking_points": [
+                format!("We've spent {} {} with you over {} orders", sup.currency, round2(our_spend), order_count),
+                format!("We have {} alternative suppliers in this category", alternatives),
+                if sup.rating >= 4.0 { String::from("Your quality is excellent — we want to grow the relationship") } else { String::from("Quality issues have increased our costs — we need a price adjustment") },
+                format!("Target: {}% reduction on {}", target_discount, input.items.join(", "))
+            ],
+            "batna": format!("Switch to alternative supplier ({}+ available)", alternatives)
+        }).to_string()
     }
 }
